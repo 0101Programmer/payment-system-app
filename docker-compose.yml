@@ -1,0 +1,9 @@
+services:
+  web:
+    build: .
+    ports:
+      - "8000:8000"
+    volumes:
+      - .:/app  # Монтируем текущую директорию в /app
+    environment:
+      - DATABASE_URL=${DATABASE_URL}

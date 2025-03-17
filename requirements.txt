@@ -1,4 +1,5 @@
 sanic
-sqlalchemy
+sqlalchemy~=2.0.39
 psycopg2-binary
 asyncpg
+python-dotenv~=1.0.1

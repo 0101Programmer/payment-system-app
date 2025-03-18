@@ -5,9 +5,9 @@ from ...database.connection import get_db
 from ...models.user import User
 
 # Создаем Blueprint
-user_bp = Blueprint("api", url_prefix="/api")
+api_user_bp = Blueprint("api_user", url_prefix="/api_user")
 
-@user_bp.route("/users", methods=["GET"])
+@api_user_bp.route("/users", methods=["GET"])
 async def get_users(request):
     async with get_db() as session:
         result = await session.execute(select(User))

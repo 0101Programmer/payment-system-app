@@ -2,7 +2,7 @@ from sanic import Sanic, json, Blueprint
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.future import select
 from ...database.connection import get_db
-from ...models.user import User
+from ...models.db_models import User
 
 # Создаем Blueprint
 api_user_bp = Blueprint("api_user", url_prefix="/api_user")

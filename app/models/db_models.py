@@ -1,4 +1,4 @@
-from sqlalchemy import Column, Integer, String, Float, ForeignKey
+from sqlalchemy import Column, Integer, String, Float, ForeignKey, Boolean
 from sqlalchemy.orm import relationship
 from ..database.connection import Base
 
@@ -17,6 +17,7 @@ class Admin(Base):
     email = Column(String, unique=True, index=True)
     password = Column(String)
     full_name = Column(String)
+    is_admin = Column(Boolean)
 
 class Account(Base):
     __tablename__ = "accounts"

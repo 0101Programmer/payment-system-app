@@ -8,8 +8,12 @@ load_dotenv()
 
 class Config:
     DATABASE_URL = os.getenv("DATABASE_URL")
+    REDIS_URL = os.getenv("REDIS_URL")
+    REDIS_HOST = os.getenv("REDIS_HOST")
+    REDIS_PORT = os.getenv("REDIS_PORT")
     SANIC_HOST = os.getenv("SANIC_HOST", "0.0.0.0")
     SANIC_PORT = int(os.getenv("SANIC_PORT", 8000))
+    ADMIN_KEY=os.getenv("ADMIN_KEY")
 
 # Настройка Jinja2
 env = Environment(

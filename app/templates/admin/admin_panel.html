@@ -1,0 +1,55 @@
+{% extends "base.html" %}
+
+{% block title %} {{ title }} {% endblock %}
+
+{% block navbar %}
+<li class="nav-item">
+    <a class="nav-link" href="/web_home_authed">Главная</a>
+</li>
+<li class="nav-item">
+    <a class="nav-link active" href="/web_admin/admin_panel">Панель администратора</a>
+</li>
+{% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+    <h1 class="text-center mb-4">Панель администратора</h1>
+    <div class="card">
+        <div class="card-body">
+            <h5 class="card-title">Данные администратора</h5>
+            <table class="table table-bordered table-striped">
+                <thead>
+                    <tr>
+                        <th>Поле</th>
+                        <th>Значение</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>ID</td>
+                        <td>{{ admin.id }}</td>
+                    </tr>
+                    <tr>
+                        <td>Email</td>
+                        <td>{{ admin.email }}</td>
+                    </tr>
+                    <tr>
+                        <td>Полное имя</td>
+                        <td>{{ admin.full_name }}</td>
+                    </tr>
+                    <tr>
+                        <td>Статус администратора</td>
+                        <td>
+                            {% if admin.is_admin %}
+                                <span class="badge bg-success">Да</span>
+                            {% else %}
+                                <span class="badge bg-danger">Нет</span>
+                            {% endif %}
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+{% endblock %}

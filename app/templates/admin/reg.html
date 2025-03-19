@@ -1,0 +1,54 @@
+{% extends "base.html" %}
+
+{% block title %} {{ title }} {% endblock %}
+
+{% block navbar %}
+<!-- Переопределяем навбар -->
+<li class="nav-item">
+    <a class="nav-link" href="/web_home">Главная</a>
+</li>
+<li class="nav-item">
+    <a class="nav-link active" href="#">Регистрация</a>
+</li>
+{% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <div class="card">
+                <div class="card-header">
+                    <h1 class="card-title text-center">Регистрация</h1>
+                </div>
+                <div class="card-body">
+                    <!-- Форма -->
+                    <form method="POST" action="/web_admin/register">
+                        <!-- Поле для email -->
+                        <div class="mb-3">
+                            <label for="email" class="form-label">Email</label>
+                            <input type="email" class="form-control" id="email" name="email" required>
+                        </div>
+                        <!-- Поле для пароля -->
+                        <div class="mb-3">
+                            <label for="password" class="form-label">Пароль</label>
+                            <input type="password" class="form-control" id="password" name="password" required>
+                        </div>
+                        <!-- Поле для имени -->
+                        <div class="mb-3">
+                            <label for="full_name" class="form-label">Имя</label>
+                            <input type="text" class="form-control" id="full_name" name="full_name" required>
+                        </div>
+                        <!-- Поле для ключа администратора -->
+                        <div class="mb-3">
+                            <label for="admin_key" class="form-label">Ключ администратора</label>
+                            <input type="text" class="form-control" id="admin_key" name="admin_key" required>
+                        </div>
+                        <!-- Кнопка отправки формы -->
+                        <button type="submit" class="btn btn-primary w-100">Register</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

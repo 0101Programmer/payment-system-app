@@ -1,6 +1,6 @@
 {% extends "base.html" %}
 
-{% block title %} {{ tite }} {% endblock %}
+{% block title %} {{ title }} {% endblock %}
 
 {% block navbar %}
 <!-- Переопределяем навбар -->
@@ -19,6 +19,6 @@
     <p class="lead">Для того чтобы продолжить взаимодействие с Payment System App, необходимо пройти авторизацию</p>
     <hr class="my-4">
     <p>Если вы являетесь администратором, пожалуйста, нажмите кнопку ниже.</p>
-    <a class="btn btn-primary btn-lg" href="#" role="button">Я администратор</a>
+    <a class="btn btn-primary btn-lg" href="web_admin/login" role="button">Я администратор</a>
 </div>
 {% endblock %}

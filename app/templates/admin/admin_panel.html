@@ -4,10 +4,7 @@
 
 {% block navbar %}
 <li class="nav-item">
-    <a class="nav-link" href="/web_home_authed">Главная</a>
-</li>
-<li class="nav-item">
-    <a class="nav-link active" href="/web_admin/admin_panel">Панель администратора</a>
+    <a class="nav-link active" href="#">Панель администратора</a>
 </li>
 {% endblock %}
 
@@ -50,6 +47,16 @@
                 </tbody>
             </table>
         </div>
+    </div>
+
+    <!-- Кнопка "Список пользователей" -->
+    <div class="text-center mt-4">
+        <a href="/web_admin/users" class="btn btn-primary">Список пользователей</a>
+    </div>
+
+    <!-- Кнопка "Выйти из системы" -->
+    <div class="text-center mt-3">
+        <a href="/web_admin/logout" class="btn btn-danger">Выйти из системы</a>
     </div>
 </div>
 {% endblock %}

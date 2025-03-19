@@ -42,10 +42,3 @@ async def register(request):
 
     template = env.get_template("admin/reg.html")
     return html(template.render(title="Registration Page"))
-
-@web_admin_reg_bp.route("/admin_panel")
-async def admin_panel(request):
-    if not request.ctx.session:
-        return redirect("/web_admin/register")
-
-    return html(f"<h1>Welcome to the Admin Panel, {request.ctx.session}!</h1>")

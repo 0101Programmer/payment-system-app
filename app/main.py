@@ -4,6 +4,7 @@ from .routes import setup_api, setup_web
 from .database.connection import engine
 from .models.db_models import Base
 from .config import Config
+import uuid  # Для генерации уникальных session_id
 
 app = Sanic("MyApp")
 
@@ -21,7 +22,7 @@ async def load_session(request):
         redis = await get_redis()
         session_data = await redis.get(session_id)
         if session_data:
-            request.ctx.session = session_data
+            request.ctx.session = session_data  # Убираем .decode()
         else:
             request.ctx.session = None
     else:
@@ -34,17 +35,17 @@ async def save_session(request, response):
         redis = await get_redis()
         session_id = request.cookies.get("session_id")
         if not session_id:
-            session_id = f"session:{id(request)}"
+            session_id = f"session:{uuid.uuid4()}"  # Генерируем уникальный session_id
             response.cookies.add_cookie(
                 key="session_id",
                 value=session_id,
-                max_age=3600,
+                max_age=3600,  # Куки действительны 1 час
                 path="/",
-                secure=False,
-                httponly=True,
-                samesite="Lax"
+                secure=False,  # Установите True, если используете HTTPS
+                httponly=True,  # Защита от доступа через JavaScript
+                samesite="Lax"  # Защита от CSRF
             )
-        await redis.set(session_id, request.ctx.session, expire=3600)
+        await redis.set(session_id, request.ctx.session, expire=3600)  # Храним сессию 1 час
 
 @app.listener('before_server_start')
 async def setup_db(app, loop):

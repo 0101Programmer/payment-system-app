@@ -1,9 +1,10 @@
-from sanic import Blueprint
+from sanic import Blueprint, redirect
 from sanic.response import html
-from ....config import env
+from ....config import env, Config
 from sqlalchemy.future import select
 from ....database.connection import get_db
 from ....models.db_models import Admin
+from ....redis_utils import get_redis  # Импортируем функцию для работы с Redis
 
 # Инициализация Blueprint для админки
 web_admin_auth_bp = Blueprint("web_admin_auth", url_prefix="/web_admin")
@@ -23,7 +24,23 @@ async def login(request):
             if admin:
                 # Если администратор найден, проверяем пароль
                 if admin.password == password:
-                    return html("<h1>Успешная авторизация!</h1>")
+                    # Создаем уникальный session_id
+                    redis = await get_redis()
+                    session_id = f"session:{email}"
+                    await redis.set(session_id, email, expire=3600)  # Храним сессию 1 час
+
+                    # Устанавливаем session_id в куки
+                    response = redirect("/web_admin/admin_panel")
+                    response.cookies.add_cookie(
+                        key="session_id",
+                        value=session_id,
+                        max_age=3600,  # Куки действительны 1 час
+                        path="/",
+                        secure=False,  # Установите True, если используете HTTPS
+                        httponly=True,  # Защита от доступа через JavaScript
+                        samesite="Lax"  # Защита от CSRF
+                    )
+                    return response
                 else:
                     return html("<h1>Некорректный пароль!</h1>")
             else:
@@ -31,8 +48,7 @@ async def login(request):
                 return html("""
                 <h1>Администратор с указанным email не найден!</h1>
                 <p><a href="/web_admin/register">Перейти к регистрации</a></p>
-                                """)
-
+                """)
 
     # Если это GET-запрос, отображаем форму
     template = env.get_template("admin/auth.html")

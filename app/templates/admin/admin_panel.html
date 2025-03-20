@@ -11,7 +11,9 @@
 {% block content %}
 <div class="container mt-5">
     <h1 class="text-center mb-4">Панель администратора</h1>
-    <div class="card">
+
+    <!-- Карточка с данными администратора -->
+    <div class="card mb-4">
         <div class="card-body">
             <h5 class="card-title">Данные администратора</h5>
             <table class="table table-bordered table-striped">
@@ -49,9 +51,19 @@
         </div>
     </div>
 
-    <!-- Кнопка "Список пользователей" -->
+    <!-- Выпадающий список действий с пользователями -->
     <div class="text-center mt-4">
-        <a href="/web_admin/users" class="btn btn-primary">Список пользователей</a>
+        <div class="dropdown">
+            <button class="btn btn-primary dropdown-toggle" type="button" id="userActionsDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+                Действия с пользователями
+            </button>
+            <ul class="dropdown-menu" aria-labelledby="userActionsDropdown">
+                <li><a class="dropdown-item" href="/web_admin/get_all_users">Список пользователей</a></li>
+                <li><a class="dropdown-item" href="/web_admin/create_user">Создать пользователя</a></li>
+                <li><a class="dropdown-item" href="/web_admin/edit_user">Редактировать пользователя</a></li>
+                <li><a class="dropdown-item text-danger" href="/web_admin/delete_user">Удалить пользователя</a></li>
+            </ul>
+        </div>
     </div>
 
     <!-- Кнопка "Выйти из системы" -->

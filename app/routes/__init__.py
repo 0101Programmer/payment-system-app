@@ -5,6 +5,7 @@ from .web.admin.admin_panel_rout import web_admin_panel_bp
 from .web.admin.auth_rout import web_admin_auth_bp
 from .web.admin.reg_rout import web_admin_reg_bp
 from .web.admin.user_crud.create import web_admin_create_user_bp
+from .web.admin.user_crud.read import web_admin_get_users_bp
 from .web.common.home_rout import web_home_bp
 
 
@@ -17,3 +18,4 @@ def setup_web(app: Sanic):
     app.blueprint(web_admin_reg_bp)
     app.blueprint(web_admin_panel_bp)
     app.blueprint(web_admin_create_user_bp)
+    app.blueprint(web_admin_get_users_bp)

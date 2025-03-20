@@ -1,13 +1,22 @@
+import logging
 from contextlib import asynccontextmanager
 
 from sqlalchemy.ext.asyncio import create_async_engine, AsyncSession, async_sessionmaker
-from sqlalchemy.orm import sessionmaker, declarative_base
+from sqlalchemy.orm import declarative_base
 
 from ..config import Config
 
+# Настройка логирования SQLAlchemy
+logging.basicConfig()
+logging.getLogger('sqlalchemy.engine').setLevel(logging.INFO)  # Уровень INFO покажет все SQL-запросы
+logging.getLogger('sqlalchemy.pool').setLevel(logging.INFO)    # Логирование пула соединений (опционально)
+
 # Асинхронный движок для подключения к базе данных
 DATABASE_URL = Config.DATABASE_URL
-engine = create_async_engine(DATABASE_URL, echo=True)
+engine = create_async_engine(
+    DATABASE_URL,
+    echo=True  # Включает вывод SQL-запросов в консоль (можно отключить, если используются логи)
+)
 
 # Создаем асинхронную фабрику сессий
 AsyncSessionLocal = async_sessionmaker(
@@ -23,4 +32,10 @@ Base = declarative_base()
 @asynccontextmanager
 async def get_db():
     async with AsyncSessionLocal() as session:
-        yield session
+        try:
+            yield session
+            await session.commit()  # Фиксируем транзакцию при успешном завершении
+        except Exception as e:
+            await session.rollback()  # Откатываем транзакцию в случае ошибки
+            logging.error(f"Database error: {str(e)}")
+            raise

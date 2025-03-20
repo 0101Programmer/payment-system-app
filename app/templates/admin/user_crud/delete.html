@@ -1,0 +1,62 @@
+{% extends "base.html" %}
+
+{% block title %} {{ title }} {% endblock %}
+
+{% block navbar %}
+<li class="nav-item">
+    <a class="nav-link" href="/web_admin/admin_panel">Панель администратора</a>
+</li>
+<li class="nav-item">
+    <a class="nav-link active" href="#">Удаление пользователя</a>
+</li>
+{% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+    <h1 class="text-center mb-4">Удаление пользователя</h1>
+
+    <!-- Сообщения об ошибках -->
+    {% if error %}
+    <div class="alert alert-danger alert-dismissible fade show" role="alert">
+        {{ error }}
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+    {% endif %}
+
+    <!-- Сообщения об успехе -->
+    {% if success %}
+    <div class="alert alert-success alert-dismissible fade show" role="alert">
+        {{ success }}
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+    {% endif %}
+
+    <div class="card">
+        <div class="card-body">
+            <form action="/web_admin/delete_user" method="POST">
+                <h5>Выберите способ удаления:</h5>
+
+                <!-- Выпадающий список -->
+                <div class="mb-3">
+                    <label for="user_id_select" class="form-label">Выбрать пользователя из списка</label>
+                    <select class="form-select" id="user_id_select" name="user_id_select">
+                        <option value="" selected disabled>Выберите пользователя</option>
+                        {% for user in users %}
+                        <option value="{{ user.id }}">{{ user.full_name }} ({{ user.email }})</option>
+                        {% endfor %}
+                    </select>
+                </div>
+
+                <!-- Или ввод ID вручную -->
+                <div class="mb-3">
+                    <label for="user_id_input" class="form-label">Или введите ID пользователя вручную</label>
+                    <input type="number" class="form-control" id="user_id_input" name="user_id_input" placeholder="Введите ID">
+                </div>
+
+                <!-- Кнопка отправки -->
+                <button type="submit" class="btn btn-danger w-100">Удалить пользователя</button>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}

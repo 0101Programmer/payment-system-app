@@ -14,7 +14,7 @@ async def admin_panel(request):
     admin_email = request.ctx.session  # Email уже загружен в middleware
 
     if not admin_email:
-        return redirect("/web_admin/register")
+        return redirect("/web_admin/login")
 
     async with get_db() as session:
         # Ищем администратора по email

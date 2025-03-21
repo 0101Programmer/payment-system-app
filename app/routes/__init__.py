@@ -1,6 +1,6 @@
 from sanic import Sanic
 
-from .api.user_routes import api_user_bp
+from .api.webhook_payment_system_route import api_payment_bp
 from .web.admin.admin_panel_rout import web_admin_panel_bp
 from .web.admin.auth_rout import web_admin_auth_bp
 from .web.admin.payments_edit.edit import web_admin_edit_user_payment_data_bp
@@ -18,7 +18,7 @@ from .web.user.reg_rout import web_user_reg_bp
 
 
 def setup_api(app: Sanic):
-    app.blueprint(api_user_bp)
+    app.blueprint(api_payment_bp)
 
 def setup_web(app: Sanic):
     # admin

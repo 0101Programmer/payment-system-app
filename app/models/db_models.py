@@ -30,7 +30,7 @@ class Payment(Base):
     __tablename__ = "payments"
     id = Column(Integer, primary_key=True, index=True)
     transaction_id = Column(String, unique=True, index=True)
-    account_id = Column(Integer, ForeignKey("accounts.id"))
+    account_id = Column(Integer, ForeignKey("accounts.id", ondelete="CASCADE"))
     user_id = Column(Integer, ForeignKey("users.id"))
     amount = Column(Float)
     signature = Column(String)

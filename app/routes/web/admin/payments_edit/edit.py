@@ -1,10 +1,12 @@
+import uuid
+
 from sanic import Blueprint, html, redirect
 from sqlalchemy.future import select
 
 from .....admin_check import admin_required
-from .....config import env
 from .....database.connection import get_db
-from .....models.db_models import User, Account, Payment
+from .....models.db_models import User, Account
+from .....process_payment_func import process_payment
 
 web_admin_edit_user_payment_data_bp = Blueprint("web_admin_edit_user_payment_data", url_prefix="/web_admin")
 
@@ -70,25 +72,16 @@ async def add_amount(request, admin, user_id, account_id):
     except (ValueError, TypeError):
         return html("<h1>Ошибка: Некорректная сумма</h1>", status=400)
 
+    # Генерируем уникальный transaction_id
+    transaction_id = str(uuid.uuid4())
+
     async with get_db() as session:
-        # Ищем пользователя по ID
-        result = await session.execute(select(User).where(User.id == user_id))
-        user = result.scalars().first()
-
-        if not user:
-            return html("<h1>Пользователь не найден</h1>", status=404)
-
-        # Ищем счет пользователя
-        result = await session.execute(select(Account).where(Account.id == account_id, Account.user_id == user_id))
-        account = result.scalars().first()
-
-        if not account:
-            return html("<h1>Счёт не найден</h1>", status=404)
-
-        # Увеличиваем баланс счета
-        account.balance += amount
         try:
+            await process_payment(session, user_id, account_id, amount, transaction_id)
             await session.commit()
+        except ValueError as e:
+            await session.rollback()
+            return html(f"<h1>Ошибка: {str(e)}</h1>", status=400)
         except Exception as e:
             await session.rollback()
             return html(f"<h1>Ошибка при начислении суммы: {str(e)}</h1>", status=500)

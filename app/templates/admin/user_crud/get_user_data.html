@@ -18,6 +18,13 @@
 <div class="container mt-5">
     <h1 class="text-center mb-4">Данные пользователя {{ user.full_name }}</h1>
 
+    <!-- Кнопка для создания нового счета -->
+    <div class="text-end mb-3">
+        <form method="POST" action="/web_admin/user/{{ user.id }}/create_account" style="display:inline;">
+            <button type="submit" class="btn btn-success btn-sm">Создать новый счёт</button>
+        </form>
+    </div>
+
     <!-- Таблица счетов -->
     <h3 class="mt-4">Счета пользователя</h3>
     <div class="table-responsive">
@@ -26,6 +33,7 @@
                 <tr>
                     <th>ID счёта</th>
                     <th>Баланс</th>
+                    <th>Действия</th>
                 </tr>
             </thead>
             <tbody>
@@ -34,11 +42,17 @@
                     <tr>
                         <td>{{ account.id }}</td>
                         <td>{{ "%.2f"|format(account.balance) }}</td>
+                        <td>
+                            <!-- Кнопка для удаления счёта -->
+                            <form method="POST" action="/web_admin/user/{{ user.id }}/delete_account/{{ account.id }}" style="display:inline;">
+                                <button type="submit" class="btn btn-danger btn-sm">Удалить</button>
+                            </form>
+                        </td>
                     </tr>
                     {% endfor %}
                 {% else %}
                     <tr>
-                        <td colspan="2" class="text-center">У пользователя нет счетов</td>
+                        <td colspan="3" class="text-center">У пользователя нет счетов</td>
                     </tr>
                 {% endif %}
             </tbody>

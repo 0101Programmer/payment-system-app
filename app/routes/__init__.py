@@ -3,6 +3,7 @@ from sanic import Sanic
 from .api.user_routes import api_user_bp
 from .web.admin.admin_panel_rout import web_admin_panel_bp
 from .web.admin.auth_rout import web_admin_auth_bp
+from .web.admin.payments_edit.edit import web_admin_edit_user_payment_data_bp
 from .web.admin.reg_rout import web_admin_reg_bp
 from .web.admin.user_crud.create import web_admin_create_user_bp
 from .web.admin.user_crud.delete import web_admin_delete_user_bp
@@ -29,6 +30,7 @@ def setup_web(app: Sanic):
     app.blueprint(web_admin_get_users_bp)
     app.blueprint(web_admin_delete_user_bp)
     app.blueprint(web_admin_update_user_bp)
+    app.blueprint(web_admin_edit_user_payment_data_bp)
     # user
     app.blueprint(web_user_auth_bp)
     app.blueprint(web_user_account_bp)

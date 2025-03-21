@@ -11,6 +11,7 @@ from .web.admin.user_crud.update import web_admin_update_user_bp
 from .web.common.home_rout import web_home_bp
 from .web.user.account import web_user_account_bp
 from .web.user.auth_rout import web_user_auth_bp
+from .web.user.pay_accounts import web_user_pay_accounts_bp
 from .web.user.reg_rout import web_user_reg_bp
 
 
@@ -31,3 +32,4 @@ def setup_web(app: Sanic):
     app.blueprint(web_user_auth_bp)
     app.blueprint(web_user_account_bp)
     app.blueprint(web_user_reg_bp)
+    app.blueprint(web_user_pay_accounts_bp)

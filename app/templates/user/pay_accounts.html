@@ -1,0 +1,68 @@
+{% extends "base.html" %}
+
+{% block title %} {{ title }} {% endblock %}
+
+{% block navbar %}
+<li class="nav-item">
+    <a class="nav-link" href="/web_user/account">Личный кабинет</a>
+</li>
+<li class="nav-item">
+    <a class="nav-link active" href="#">Мои счета</a>
+</li>
+{% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+    <h1 class="text-center mb-4">Мои счета</h1>
+
+    <!-- Блок для отображения ошибок -->
+    {% if error %}
+    <div class="alert alert-danger alert-dismissible fade show" role="alert">
+        {{ error }}
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+    {% endif %}
+
+    <!-- Кнопка для создания нового счета -->
+    <div class="text-end mb-3">
+        <form method="POST" action="/web_user/pay_accounts/create" style="display:inline;">
+            <button type="submit" class="btn btn-primary">Создать новый счёт</button>
+        </form>
+    </div>
+
+    <!-- Таблица счетов -->
+    <div class="card">
+        <div class="card-body">
+            <table class="table table-bordered table-striped">
+                <thead>
+                    <tr>
+                        <th>ID счёта</th>
+                        <th>Баланс</th>
+                        <th>Действия</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% if accounts %}
+                        {% for account in accounts %}
+                            <tr>
+                                <td>{{ account.id }}</td>
+                                <td>{{ "%.2f"|format(account.balance) }}</td>
+                                <td>
+                                    <!-- Кнопка для удаления счёта -->
+                                    <form method="POST" action="/web_user/pay_accounts/delete/{{ account.id }}" style="display:inline;">
+                                        <button type="submit" class="btn btn-danger btn-sm">Удалить</button>
+                                    </form>
+                                </td>
+                            </tr>
+                        {% endfor %}
+                    {% else %}
+                        <tr>
+                            <td colspan="3" class="text-center">Нет доступных счетов</td>
+                        </tr>
+                    {% endif %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+{% endblock %}

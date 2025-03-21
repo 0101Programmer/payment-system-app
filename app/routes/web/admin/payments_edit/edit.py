@@ -60,3 +60,38 @@ async def delete_account(request, admin, user_id, account_id):
     # Перенаправляем обратно на страницу данных пользователя
     return redirect(f"/web_admin/user/{user_id}/payment_data")
 
+
+@web_admin_edit_user_payment_data_bp.route("/user/<user_id:int>/add_amount/<account_id:int>", methods=["POST"])
+@admin_required
+async def add_amount(request, admin, user_id, account_id):
+    # Получаем сумму из формы
+    try:
+        amount = float(request.form.get("amount"))
+    except (ValueError, TypeError):
+        return html("<h1>Ошибка: Некорректная сумма</h1>", status=400)
+
+    async with get_db() as session:
+        # Ищем пользователя по ID
+        result = await session.execute(select(User).where(User.id == user_id))
+        user = result.scalars().first()
+
+        if not user:
+            return html("<h1>Пользователь не найден</h1>", status=404)
+
+        # Ищем счет пользователя
+        result = await session.execute(select(Account).where(Account.id == account_id, Account.user_id == user_id))
+        account = result.scalars().first()
+
+        if not account:
+            return html("<h1>Счёт не найден</h1>", status=404)
+
+        # Увеличиваем баланс счета
+        account.balance += amount
+        try:
+            await session.commit()
+        except Exception as e:
+            await session.rollback()
+            return html(f"<h1>Ошибка при начислении суммы: {str(e)}</h1>", status=500)
+
+    # Перенаправляем обратно на страницу данных пользователя
+    return redirect(f"/web_admin/user/{user_id}/payment_data")

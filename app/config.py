@@ -14,6 +14,7 @@ class Config:
     SANIC_HOST = os.getenv("SANIC_HOST", "0.0.0.0")
     SANIC_PORT = int(os.getenv("SANIC_PORT", 8000))
     ADMIN_KEY=os.getenv("ADMIN_KEY")
+    PAYMENT_SECRET_KEY=os.getenv("PAYMENT_SECRET_KEY")
 
 # Настройка Jinja2
 env = Environment(

@@ -1,10 +1,49 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Title</title>
-</head>
-<body>
+{% extends "base.html" %}
 
-</body>
-</html>
+{% block title %} {{ title }} {% endblock %}
+
+{% block navbar %}
+<li class="nav-item">
+    <a class="nav-link active" href="#">Личный кабинет</a>
+</li>
+{% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+    <h1 class="text-center mb-4">Личный кабинет</h1>
+
+    <!-- Карточка с данными пользователя -->
+    <div class="card mb-4">
+        <div class="card-body">
+            <h5 class="card-title">Данные пользователя</h5>
+            <table class="table table-bordered table-striped">
+                <thead>
+                    <tr>
+                        <th>Поле</th>
+                        <th>Значение</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>ID</td>
+                        <td>{{ user.id }}</td>
+                    </tr>
+                    <tr>
+                        <td>Email</td>
+                        <td>{{ user.email }}</td>
+                    </tr>
+                    <tr>
+                        <td>Полное имя</td>
+                        <td>{{ user.full_name }}</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <!-- Кнопка "Выйти из системы" -->
+    <div class="text-center mt-3">
+        <a href="/web_user/logout" class="btn btn-danger">Выйти из системы</a>
+    </div>
+</div>
+{% endblock %}

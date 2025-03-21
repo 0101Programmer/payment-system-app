@@ -1,10 +1,63 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Title</title>
-</head>
-<body>
+{% extends "base.html" %}
 
-</body>
-</html>
+{% block title %} {{ title }} {% endblock %}
+
+{% block navbar %}
+<li class="nav-item">
+    <a class="nav-link" href="/web_user/account">Личный кабинет</a>
+</li>
+<li class="nav-item">
+    <a class="nav-link" href="/web_user/pay_accounts">Мои счета</a>
+</li>
+<li class="nav-item">
+    <a class="nav-link active" href="#">История платежей</a>
+</li>
+{% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+    <h1 class="text-center mb-4">История платежей</h1>
+
+    <!-- Блок для отображения ошибок -->
+    {% if error %}
+    <div class="alert alert-danger alert-dismissible fade show" role="alert">
+        {{ error }}
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+    {% endif %}
+
+    <!-- Таблица платежей -->
+    <div class="card">
+        <div class="card-body">
+            <table class="table table-bordered table-striped">
+                <thead>
+                    <tr>
+                        <th>ID платежа</th>
+                        <th>ID транзакции</th>
+                        <th>ID счёта</th>
+                        <th>Сумма</th>
+                        <th>Подпись</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% if payments %}
+                        {% for payment in payments %}
+                            <tr>
+                                <td>{{ payment.id }}</td>
+                                <td>{{ payment.transaction_id }}</td>
+                                <td>{{ payment.account_id }}</td>
+                                <td>{{ "%.2f"|format(payment.amount) }}</td>
+                                <td>{{ payment.signature }}</td>
+                            </tr>
+                        {% endfor %}
+                    {% else %}
+                        <tr>
+                            <td colspan="5" class="text-center">Нет доступных платежей</td>
+                        </tr>
+                    {% endif %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+{% endblock %}

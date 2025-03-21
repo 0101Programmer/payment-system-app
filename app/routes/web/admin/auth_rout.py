@@ -1,16 +1,19 @@
 from sanic import Blueprint, redirect
 from sanic.response import html
-from ....config import env, Config
 from sqlalchemy.future import select
+
+from ....config import env
 from ....database.connection import get_db
 from ....models.db_models import Admin
-from ....redis_utils import get_redis  # Импортируем функцию для работы с Redis
+from ....redis_utils import get_redis
 
 # Инициализация Blueprint для админки
 web_admin_auth_bp = Blueprint("web_admin_auth", url_prefix="/web_admin")
 
 @web_admin_auth_bp.route("/login", methods=["GET", "POST"])
 async def login(request):
+    error = None  # Переменная для хранения сообщений об ошибках
+
     if request.method == "POST":
         # Получаем данные из формы
         email = request.form.get("email")
@@ -36,20 +39,16 @@ async def login(request):
                         value=session_id,
                         max_age=3600,  # Куки действительны 1 час
                         path="/",
-                        secure=False,  # Установите True, если используете HTTPS
+                        secure=False,  # True, если используется HTTPS
                         httponly=True,  # Защита от доступа через JavaScript
                         samesite="Lax"  # Защита от CSRF
                     )
                     return response
                 else:
-                    return html("<h1>Некорректный пароль!</h1>")
+                    error = "Некорректный пароль!"
             else:
-                # Если администратор не найден, предлагаем зарегистрироваться
-                return html("""
-                <h1>Администратор с указанным email не найден!</h1>
-                <p><a href="/web_admin/register">Перейти к регистрации</a></p>
-                """)
+                error = "Администратор с указанным email не найден!"
 
-    # Если это GET-запрос, отображаем форму
+    # Если это GET-запрос или есть ошибка, отображаем форму
     template = env.get_template("admin/auth.html")
-    return html(template.render(title="Login Page"))
+    return html(template.render(title="Login Page", error=error))

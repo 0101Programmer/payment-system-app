@@ -4,11 +4,14 @@ from ....config import env, Config
 from sqlalchemy.future import select
 from ....database.connection import get_db
 from ....models.db_models import Admin
+from ....redis_utils import get_redis
 
 web_admin_reg_bp = Blueprint("web_admin_reg", url_prefix="/web_admin")
 
 @web_admin_reg_bp.route("/register", methods=["GET", "POST"])
 async def register(request):
+    error = None  # Переменная для хранения сообщений об ошибках
+
     if request.method == "POST":
         email = request.form.get("email")
         password = request.form.get("password")
@@ -21,7 +24,7 @@ async def register(request):
                 existing_admin = result.scalars().first()
 
                 if existing_admin:
-                    return html("<h1>Администратор с таким email уже зарегистрирован!</h1>")
+                    error = "Администратор с таким email уже зарегистрирован!"
                 else:
                     new_admin = Admin(
                         email=email,
@@ -31,14 +34,32 @@ async def register(request):
                     )
 
                     session.add(new_admin)
-                    await session.commit()
+                    try:
+                        await session.commit()
 
-                    # Сохраняем email администратора в сессию
-                    request.ctx.session = email
+                        # Создаем уникальный session_id для администратора
+                        redis = await get_redis()
+                        session_id = f"session:{email}"
+                        await redis.set(session_id, email, expire=3600)  # Храним сессию 1 час
 
-                    return redirect("/web_admin/admin_panel")
+                        # Устанавливаем session_id в куки
+                        response = redirect("/web_admin/admin_panel")
+                        response.cookies.add_cookie(
+                            key="session_id",
+                            value=session_id,
+                            max_age=3600,  # Куки действительны 1 час
+                            path="/",
+                            secure=False,  # True, если используется HTTPS
+                            httponly=True,  # Защита от доступа через JavaScript
+                            samesite="Lax"  # Защита от CSRF
+                        )
+                        return response
+                    except Exception as e:
+                        await session.rollback()
+                        error = f"Ошибка при регистрации: {str(e)}"
         else:
-            return html("<h1>Неверный ключ администратора!</h1>")
+            error = "Неверный ключ администратора!"
 
+    # Если это GET-запрос или есть ошибка, отображаем форму
     template = env.get_template("admin/reg.html")
-    return html(template.render(title="Registration Page"))
+    return html(template.render(title="Registration Page", error=error))

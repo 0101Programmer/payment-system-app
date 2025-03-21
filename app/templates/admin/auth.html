@@ -20,6 +20,14 @@
                     <h1 class="card-title text-center">Вход в личный кабинет</h1>
                 </div>
                 <div class="card-body">
+                    <!-- Блок для отображения ошибок -->
+                    {% if error %}
+                    <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                        {{ error }}
+                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                    </div>
+                    {% endif %}
+
                     <!-- Форма -->
                     <form method="POST" action="/web_admin/login">
                         <!-- Поле для email -->

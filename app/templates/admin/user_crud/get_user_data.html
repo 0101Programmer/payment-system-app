@@ -1,0 +1,81 @@
+{% extends "base.html" %}
+
+{% block title %} {{ title }} {% endblock %}
+
+{% block navbar %}
+<li class="nav-item">
+    <a class="nav-link" href="/web_admin/admin_panel">Панель администратора</a>
+</li>
+<li class="nav-item">
+    <a class="nav-link" href="/web_admin/get_all_users">Список пользователей</a>
+</li>
+<li class="nav-item">
+    <a class="nav-link active" href="#">Данные пользователя</a>
+</li>
+{% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+    <h1 class="text-center mb-4">Данные пользователя {{ user.full_name }}</h1>
+
+    <!-- Таблица счетов -->
+    <h3 class="mt-4">Счета пользователя</h3>
+    <div class="table-responsive">
+        <table class="table table-bordered table-striped">
+            <thead>
+                <tr>
+                    <th>ID счёта</th>
+                    <th>Баланс</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% if accounts %}
+                    {% for account in accounts %}
+                    <tr>
+                        <td>{{ account.id }}</td>
+                        <td>{{ "%.2f"|format(account.balance) }}</td>
+                    </tr>
+                    {% endfor %}
+                {% else %}
+                    <tr>
+                        <td colspan="2" class="text-center">У пользователя нет счетов</td>
+                    </tr>
+                {% endif %}
+            </tbody>
+        </table>
+    </div>
+
+    <!-- Таблица платежей -->
+    <h3 class="mt-4">Платежи пользователя</h3>
+    <div class="table-responsive">
+        <table class="table table-bordered table-striped">
+            <thead>
+                <tr>
+                    <th>ID платежа</th>
+                    <th>ID транзакции</th>
+                    <th>ID счёта</th>
+                    <th>Сумма</th>
+                    <th>Подпись</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% if payments %}
+                    {% for payment in payments %}
+                    <tr>
+                        <td>{{ payment.id }}</td>
+                        <td>{{ payment.transaction_id }}</td>
+                        <td>{{ payment.account_id }}</td>
+                        <td>{{ "%.2f"|format(payment.amount) }}</td>
+                        <td>{{ payment.signature }}</td>
+                    </tr>
+                    {% endfor %}
+                {% else %}
+                    <tr>
+                        <td colspan="5" class="text-center">У пользователя нет платежей</td>
+                    </tr>
+                {% endif %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}

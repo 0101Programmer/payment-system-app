@@ -27,16 +27,22 @@
                 </tr>
             </thead>
             <tbody>
-                {% for user in users %}
-                <tr>
-                    <td>{{ user.id }}</td>
-                    <td>{{ user.email }}</td>
-                    <td>{{ user.full_name }}</td>
-                    <td>
-                        <a href="#" class="btn btn-sm btn-primary">Список счетов с балансами</a>
-                    </td>
-                </tr>
-                {% endfor %}
+                {% if users %}
+                    {% for user in users %}
+                    <tr>
+                        <td>{{ user.id }}</td>
+                        <td>{{ user.email }}</td>
+                        <td>{{ user.full_name }}</td>
+                        <td>
+                            <a href="/web_admin/user/{{ user.id }}/payment_data" class="btn btn-sm btn-primary">Список счетов с балансами</a>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                {% else %}
+                    <tr>
+                        <td colspan="4" class="text-center">Нет доступных пользователей</td>
+                    </tr>
+                {% endif %}
             </tbody>
         </table>
     </div>

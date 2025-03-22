@@ -41,7 +41,7 @@ async def save_session(request, response):
                 value=session_id,
                 max_age=3600,  # Куки действительны 1 час
                 path="/",
-                secure=False,  # Установите True, если используете HTTPS
+                secure=False,  # True, если используется HTTPS
                 httponly=True,  # Защита от доступа через JavaScript
                 samesite="Lax"  # Защита от CSRF
             )

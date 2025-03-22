@@ -16,6 +16,14 @@ class Config:
     ADMIN_KEY=os.getenv("ADMIN_KEY")
     PAYMENT_SECRET_KEY=os.getenv("PAYMENT_SECRET_KEY")
 
+    # Определяем, используется ли Docker
+    USE_DOCKER = int(os.getenv("USE_DOCKER"))
+
+    # Переменные для использования без запуска Docker
+    NO_DOCKER_DATABASE_URL = os.getenv("NO_DOCKER_DATABASE_URL")
+    NO_DOCKER_REDIS_HOST = os.getenv("NO_DOCKER_REDIS_HOST")
+    NO_DOCKER_REDIS_PORT = os.getenv("NO_DOCKER_REDIS_PORT")
+
 # Настройка Jinja2
 env = Environment(
     loader=FileSystemLoader("app/templates"),  # Указываем путь к шаблонам

@@ -8,14 +8,14 @@ from ..config import Config
 
 # Настройка логирования SQLAlchemy
 logging.basicConfig()
-logging.getLogger('sqlalchemy.engine').setLevel(logging.INFO)  # Уровень INFO покажет все SQL-запросы
-logging.getLogger('sqlalchemy.pool').setLevel(logging.INFO)    # Логирование пула соединений (опционально)
+logging.getLogger('sqlalchemy.engine').setLevel(logging.INFO)  # Уровень INFO
+logging.getLogger('sqlalchemy.pool').setLevel(logging.INFO)    # Логирование пула соединений
 
 # Асинхронный движок для подключения к базе данных
-DATABASE_URL = Config.DATABASE_URL
+DATABASE_URL = Config.DATABASE_URL if int(Config.USE_DOCKER) else Config.NO_DOCKER_DATABASE_URL
 engine = create_async_engine(
     DATABASE_URL,
-    echo=True  # Включает вывод SQL-запросов в консоль (можно отключить, если используются логи)
+    echo=True
 )
 
 # Создаем асинхронную фабрику сессий

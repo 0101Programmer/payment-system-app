@@ -150,5 +150,59 @@ pm.variables.set("signature", signature);
 ![Снимок экрана 2025-03-22 135705](https://github.com/user-attachments/assets/b0490d03-c889-45de-b3b6-99222f59340f)
 
 
+## 5. Запуск проекта (без использования Docker)
+
+### После остановки контейнера, поменяем переменную USE_DOCKER из .env на False
+
+![Снимок экрана 2025-03-22 135932](https://github.com/user-attachments/assets/a281a9b5-8ce5-43a6-b119-732ca1a60472)
+
+### Далее необходимо запустить сервер для Redis DB
+> ~$ sudo service redis-server start
+
+### Теперь можно запустить проект
+
+> python run_project.py
+
+### Откроем главную страницу приложения — /web_home/
+
+![Снимок экрана 2025-03-22 142938](https://github.com/user-attachments/assets/a717edb0-67f4-4950-834f-8be8416c64d0)
+
+### Так как тут уже используется другой сервер для Redis, то придётся снова авторизироваться. Зайдём под аккаунтом обычного пользователя (email: user@example.com, пароль: 1234)
+### Попадём в личный кабинет, тут есть информация о текущем пользователе, а также вкладки:
+- Мои счета
+- История платежей
+
+![Снимок экрана 2025-03-22 143200](https://github.com/user-attachments/assets/c229e3fe-d24b-493a-ab4c-3067d1be7bb2)
+
+### На вкладках отображается соответствующая информация
+
+![Снимок экрана 2025-03-22 143637](https://github.com/user-attachments/assets/2d3c17ff-958a-4706-bfa4-aad6aa340193)
+
+![Снимок экрана 2025-03-22 143656](https://github.com/user-attachments/assets/ed94b3cc-b846-45a9-9c10-9cb51a07e774)
+
+### Для отправки запроса на вебхук по начислению средств на счёт можно воспользоваться не только Postman, но также выполнив команду (во втором терминале):
+
+
+> python app/side_payment_sys_request.py
+
+### Однако выйдет ошибка
+![Снимок экрана 2025-03-22 144341](https://github.com/user-attachments/assets/2d43337c-291c-4abe-a5ce-e937507e795d)
+
+### Чуть исправим transaction_id (вместо 5 в начале напишем 4) и попробуем снова
+
+![Снимок экрана 2025-03-22 144520](https://github.com/user-attachments/assets/a171fc5f-3d8a-46c1-a25a-bd6eee4bbaf5)
+
+
+### Теперь всё сработало как надо
+
+![Снимок экрана 2025-03-22 144630](https://github.com/user-attachments/assets/b0142021-f5e3-4574-95bf-9a4a6ad7a6c2)
+
+### В истории платежей появился новый платёж
+
+![Снимок экрана 2025-03-22 144719](https://github.com/user-attachments/assets/5191d337-9b0d-4f88-9501-cc0e7e76f733)
+
+### А также пополнился уже существующий счёт
+
+![Снимок экрана 2025-03-22 144747](https://github.com/user-attachments/assets/3bb01894-58f5-4bf0-ba24-7c472bad4f97)
 
 
